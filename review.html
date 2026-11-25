@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review kata – Wanda</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="canonical" href="https://benisobahasa.github.io/wanda/review.html">
+<style>
+:root{color-scheme:light dark;--gold:#d9a441;--ink:#0e1a2e}
+*{box-sizing:border-box}body{font:17px/1.55 system-ui,sans-serif;max-width:40rem;margin:0 auto;padding:1rem}
+h1{font:700 1.5rem Georgia,serif;margin:.2rem 0 .4rem}input,select,textarea,button{font:inherit;padding:.65rem;border-radius:.5rem;border:1px solid #8888;width:100%}
+button{width:auto;cursor:pointer;background:var(--ink);color:#fff;border:0;margin:.25rem .25rem .25rem 0;font-weight:600}button.ok{background:#2e7d32}button.bad{background:#b3261e}button.alt{background:#8886;color:inherit}button:disabled{opacity:.4;cursor:not-allowed}
+.card{border:1px solid #8886;border-radius:.9rem;padding:1.1rem;margin:1rem 0}.form{font:700 2rem Georgia,serif}.gloss{font-size:1.3rem;margin:.3rem 0}
+.chip{display:inline-block;background:#d9a44133;border:1px solid #d9a44199;border-radius:2rem;padding:.05rem .65rem;font-size:.85rem;margin-right:.3rem}.note,small{color:#888}label{display:block;margin:.7rem 0 .15rem;font-weight:600}
+a{color:inherit}
+</style>
+</head>
+<body>
+<p class="note"><a href="index.html">← Wanda</a> · <a href="try.html#saran">Tambah kata baru</a></p>
+<h1>Review kata</h1>
+<p>Anda penutur bahasa Jawa? Bantu kami memeriksa apakah arti tiap kata sudah benar. Dua orang berbeda yang menyetujui sebuah kata membuatnya berstatus <em>reviewed</em>.</p>
+<p class="note">Keputusan Anda hanya tersimpan di perangkat ini sampai Anda mengunduh dan mengirimkannya. Cukup pakai nama samaran; nama asli tidak diperlukan.</p>
+<label for="who">Nama samaran Anda</label><input id="who" maxlength="40" placeholder="contoh: wong-pati">
+<label for="dia">Dialek yang ingin direview</label><select id="dia"><option value="">Semua</option></select>
+<div class="card" id="card" aria-live="polite"></div>
+<p class="note" id="prog"></p>
+<details><summary>Unduh atau kirim hasil review</summary>
+<p><button id="dl" class="alt">Unduh log (.tsv)</button><button id="cp" class="alt">Salin log</button><button id="gh" class="alt">Buka GitHub issue</button><button id="clr" class="alt">Hapus data di perangkat ini</button></p>
+<p class="note">Setelah mengunduh, lampirkan file ke GitHub issue atau kirim ke pengelola proyek. Pengelola menggabungkannya dengan <code>wanda import-reviews</code>.</p></details>
+<script src="data.js"></script>
+<script>
+var $=function(i){return document.getElementById(i)},KEY='wanda_review_v1',S={who:'',log:[]},skipped={},cur=null;
+function load(){try{var v=JSON.parse(localStorage.getItem(KEY)||'{}');S.who=v.who||'';S.log=v.log||[]}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+var E=WANDA_DATA.entries;
+function pending(){var who=$('who').value.trim(),d=$('dia').value;
+  return E.filter(function(r){if(r[4]==='reviewed'||(d&&r[2]!==d))return false;var k=r[0]+'|'+r[3];if(skipped[k])return false;
+    return !S.log.some(function(l){return l.reviewer===who&&l.form===r[0]&&l.gloss===r[3]})})}
+function render(){var p=pending(),c=$('card'),who=$('who').value.trim();c.textContent='';cur=p[0]||null;
+  var done=S.log.filter(function(l){return l.reviewer===who}).length;$('prog').textContent='Sudah Anda review: '+done+' · Tersisa: '+p.length;
+  if(!cur){c.textContent=who?'Tidak ada kata tersisa untuk filter ini. Terima kasih!':'Isi nama samaran untuk mulai.';return}
+  function el(t,cls,txt){var x=document.createElement(t);if(cls)x.className=cls;if(txt!==undefined)x.textContent=txt;c.appendChild(x);return x}
+  el('div','form',cur[0]);var m=el('div');['register: '+cur[1],'dialek: '+cur[2]].forEach(function(t){var s=document.createElement('span');s.className='chip';s.textContent=t;m.appendChild(s)});
+  if(cur[5])el('small','', 'Varian: '+cur[5]);
+  el('div','gloss','= '+cur[3]);
+  var l1=el('label','', 'Arti yang benar (isi hanya jika perlu diperbaiki)');l1.htmlFor='fix';var f=el('input');f.id='fix';
+  var l2=el('label','', 'Catatan (opsional)');l2.htmlFor='nt';var n=el('input');n.id='nt';
+  var b=el('div');function btn(t,cls,fn){var x=document.createElement('button');x.textContent=t;x.className=cls;x.disabled=!who;x.onclick=fn;b.appendChild(x)}
+  btn('✓ Benar','ok',function(){decide('approve')});btn('✎ Perbaiki','',function(){if(!$('fix').value.trim()){$('fix').focus();return}decide('edit')});
+  btn('✗ Salah','bad',function(){decide('reject')});btn('Lewati','alt',function(){skipped[cur[0]+'|'+cur[3]]=1;render()})}
+function decide(dec){var who=$('who').value.trim();if(!who)return;
+  S.log.push({form:cur[0],gloss:cur[3],reviewer:who,decision:dec,suggested:dec==='edit'?$('fix').value.trim():'',note:$('nt').value.trim(),ts:new Date().toISOString().slice(0,19)+'+00:00'});S.who=who;save();render()}
+function tsv(){var c=function(s){return String(s).replace(/[\t\r\n]+/g,' ').trim()};
+  return ['# form\tindonesian\treviewer\tdecision\tsuggested\tnote\ttimestamp'].concat(S.log.map(function(l){return [l.form,l.gloss,l.reviewer,l.decision,l.suggested,l.note,l.ts].map(c).join('\t')})).join('\n')+'\n'}
+$('dl').onclick=function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([tsv()],{type:'text/tab-separated-values'}));a.download='wanda_review_'+($('who').value.trim()||'anon')+'.tsv';document.body.appendChild(a);a.click();a.remove()};
+$('cp').onclick=function(){navigator.clipboard&&navigator.clipboard.writeText(tsv())};
+$('gh').onclick=function(){window.open('https://github.com/benisobahasa/wanda/issues/new?title='+encodeURIComponent('Review log dari '+($('who').value.trim()||'anon'))+'&body='+encodeURIComponent('Lampirkan file log review (.tsv) di sini. Jumlah keputusan: '+S.log.length),'_blank')};
+$('clr').onclick=function(){if(confirm('Hapus semua keputusan review di perangkat ini? Unduh dulu jika belum.')){S.log=[];save();render()}};
+load();var ds={};E.forEach(function(r){ds[r[2]]=1});Object.keys(ds).sort().forEach(function(d){var o=document.createElement('option');o.value=o.textContent=d;$('dia').appendChild(o)});
+$('who').value=S.who;$('who').oninput=render;$('dia').onchange=render;render();
+</script>
+</body>
+</html>
