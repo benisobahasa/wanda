@@ -1,0 +1,2 @@
+gradio
+git+https://github.com/benisobahasa/wanda.git

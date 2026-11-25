@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coba Wanda – Pemahaman Bahasa Jawa &amp; Dialek</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="canonical" href="https://benisobahasa.github.io/wanda/try.html">
+<style>
+:root{color-scheme:light dark;--ok:#2e7d32;--amb:#b26a00;--low:#777}
+body{font:17px/1.5 system-ui,sans-serif;max-width:46rem;margin:0 auto;padding:1rem}
+h1{font-size:1.4rem;margin:.2rem 0}textarea,input,select,button{font:inherit;padding:.6rem;border-radius:.5rem;border:1px solid #8888;width:100%;box-sizing:border-box}
+button{width:auto;cursor:pointer;background:#1a6ed8;color:#fff;border:0;margin:.3rem .3rem .3rem 0}button.alt{background:#8886;color:inherit}
+.box{border:1px solid #8886;border-radius:.6rem;padding:.8rem;margin:.8rem 0;min-height:2rem;white-space:pre-wrap}
+.w{border-radius:.25rem;padding:0 .15rem;cursor:pointer}.ok{background:#2e7d3233;border-bottom:2px solid var(--ok)}.amb{background:#b26a0033;border-bottom:2px solid var(--amb)}.low{border-bottom:2px dashed var(--low)}
+small,.note{color:#888}details{margin:.8rem 0}label{display:block;margin:.5rem 0 .1rem}
+</style>
+</head>
+<body>
+<p class="note"><a href="index.html">← Wanda</a> · <a href="review.html">Review kata</a></p>
+<h1>Wanda <small>– pahami bahasa Jawa &amp; dialek</small></h1>
+<p class="note">Tempel atau ketik teks Jawa (ngoko, krama, dialek). Wanda menampilkan arti Indonesia-nya. Semua diproses di perangkat Anda; tidak ada yang dikirim ke server.</p>
+<label for="in">Teks Jawa / dialek</label>
+<textarea id="in" rows="4" placeholder="contoh: kowe wis mangan durung?"></textarea>
+<div>
+<button id="go">Pahami</button>
+<button class="alt" data-ex="Kowe wis mangan durung? Aku kencot">Contoh 1</button>
+<button class="alt" data-ex="kulo mboten ngertos">Contoh 2</button>
+<button class="alt" data-ex="kepriwe kabare, inyong wis mulih">Contoh 3</button>
+</div>
+<label><input type="checkbox" id="strict" style="width:auto"> Hanya kata yang persis ada di kamus (lebih hati-hati)</label>
+<h2 style="font-size:1.1rem">Teks asli <small>(ketuk kata untuk detail)</small></h2>
+<div class="box" id="orig" aria-live="polite"></div>
+<div class="note" id="detail"></div>
+<h2 style="font-size:1.1rem">Arti dalam bahasa Indonesia</h2>
+<div class="box" id="out" aria-live="polite"></div>
+<button id="copy1" class="alt">Salin teks Indonesia</button>
+<button id="copy2" class="alt">Salin konteks untuk AI</button>
+<p class="note"><span class="w ok">hijau</span> diubah · <span class="w amb">kuning</span> ambigu (tidak ditebak) · <span class="w low">putus-putus</span> mirip tapi kurang yakin</p>
+<details id="saran"><summary>Kata salah atau kata baru? Bantu kami</summary>
+<label for="f">Kata (Jawa/dialek)</label><input id="f">
+<label for="g">Artinya dalam bahasa Indonesia</label><input id="g">
+<label for="r">Tingkat tutur</label><select id="r"><option>ngoko</option><option>madya</option><option>krama</option><option>krama-inggil</option></select>
+<label for="d">Dialek / daerah</label><input id="d" value="pantura-rembang">
+<button id="send">Kirim saran (GitHub)</button><button id="tsv" class="alt">Salin baris TSV</button>
+<p class="note">Saran Anda ditinjau penutur lain sebelum masuk kamus. Kamus saat ini <b id="n"></b> kata dan belum direview penuh.</p></details>
+<p class="note">Open source (MPL-2.0) · <a href="https://github.com/benisobahasa/wanda">kode &amp; kebijakan data</a> · v0.3: prototipe awal, bisa salah.</p>
+<script src="data.js"></script><script src="wanda.js"></script>
+<script>
+var $=function(i){return document.getElementById(i)},P,txt='';
+function run(){
+  P=WANDA.create(null,{fuzzy:!$('strict').checked});txt=$('in').value;var t=P.analyze(txt),o=$('orig'),last=0;o.textContent='';
+  t.forEach(function(r){
+    o.appendChild(document.createTextNode(txt.slice(last,r.start)));last=r.end;
+    var s=document.createElement('span'),c=r.alternatives.length?'amb':r.applied?'ok':r.kind==='fuzzy'||r.kind==='exact'?'low':'';
+    s.textContent=r.original;if(c){s.className='w '+c;s.tabIndex=0;s.onclick=function(){show(r)}}o.appendChild(s)});
+  o.appendChild(document.createTextNode(txt.slice(last)));$('out').textContent=P.normalize(txt);$('detail').textContent='';$('n').textContent=P.size}
+function show(r){var e=r.entry;$('detail').textContent=r.original+' → '+(r.alternatives.length?'ambigu: '+[e].concat(r.alternatives).map(function(x){return x.indonesian}).join(' / '):e.indonesian)+' ('+e.register+', '+e.dialect+') · kecocokan '+r.score.toFixed(2)+(e.status==='unreviewed'?' · belum direview':'')}
+$('go').onclick=run;$('strict').onchange=run;
+document.querySelectorAll('[data-ex]').forEach(function(b){b.onclick=function(){$('in').value=b.dataset.ex;run()}});
+function cp(s){navigator.clipboard&&navigator.clipboard.writeText(s)}
+$('copy1').onclick=function(){cp($('out').textContent)};$('copy2').onclick=function(){cp(P?P.llmContext(txt):'')};
+function row(){return[$('f').value.trim(),$('r').value,$('d').value.trim(),$('g').value.trim(),'unreviewed'].join('\t')}
+$('tsv').onclick=function(){cp(row())};
+$('send').onclick=function(){window.open('https://github.com/benisobahasa/wanda/issues/new?title='+encodeURIComponent('Kata: '+$('f').value)+'&body='+encodeURIComponent('Baris kamus (TSV):\n\n'+row()),'_blank')};
+P=WANDA.create();$('n').textContent=P.size;if(location.hash==='#saran')$('saran').open=true;
+</script>
+</body>
+</html>

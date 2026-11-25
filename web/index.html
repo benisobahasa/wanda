@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wanda – AI yang mengerti bahasa Jawa dan dialek</title>
+<meta name="description" content="Wanda: open-source middleware that helps AI understand Javanese and Indonesian dialect speech. Offline, transparent, community-governed.">
+<meta property="og:title" content="Wanda – Phono-Semantic Intelligence Layer">
+<meta property="og:description" content="Open middleware between speech-to-text and language models for Javanese and dialect speech.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://benisobahasa.github.io/wanda/">
+<link rel="canonical" href="https://benisobahasa.github.io/wanda/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#0e1a2e">
+<meta property="og:image" content="https://benisobahasa.github.io/wanda/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root{--ink:#0e1a2e;--ink2:#16263f;--gold:#d9a441;--paper:#faf7f2;--tx:#1b2430;--mut:#5c6675;--line:#e6dfd2}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font:17px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--tx);background:var(--paper)}
+h1,h2,h3{font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;line-height:1.15;margin:0}
+.wrap{max-width:68rem;margin:0 auto;padding:0 1.25rem}
+a:focus-visible,button:focus-visible,textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.skip{position:absolute;left:-99rem}.skip:focus{left:1rem;top:1rem;background:#fff;padding:.5rem;z-index:9}
+header{position:sticky;top:0;z-index:5;background:#0e1a2eee;backdrop-filter:blur(8px);color:#fff}
+header .wrap{display:flex;align-items:center;gap:1.2rem;height:3.6rem}
+.logo{display:flex;align-items:center;gap:.55rem;font:700 1.35rem Georgia,serif;letter-spacing:.02em;text-decoration:none;color:#fff}
+nav{display:flex;gap:1.1rem;margin-left:auto;align-items:center;font-size:.95rem}nav a{color:#fff;text-decoration:none;opacity:.85}nav a:hover{opacity:1}
+.lg{background:none;border:1px solid #ffffff55;color:#fff;border-radius:.4rem;padding:.2rem .55rem;cursor:pointer;font:inherit;font-size:.85rem}
+.btn{display:inline-block;padding:.7rem 1.25rem;border-radius:.6rem;font:600 1rem system-ui,sans-serif;text-decoration:none;border:1px solid transparent;cursor:pointer}
+.gold{background:var(--gold);color:#1a1405}.ghost{border-color:#ffffff66;color:#fff}.dark{background:var(--ink);color:#fff}
+.hero{background:radial-gradient(60rem 30rem at 85% -10%,#d9a44140,transparent),linear-gradient(160deg,var(--ink),var(--ink2));color:#fff;padding:4.5rem 0 5rem}
+.hero .wrap{display:grid;gap:3rem;grid-template-columns:1.1fr .9fr;align-items:center}
+.kick{color:var(--gold);letter-spacing:.12em;text-transform:uppercase;font-size:.78rem;font-weight:600}
+.hero h1{font-size:clamp(2.3rem,5vw,3.7rem);margin:.7rem 0 1rem}.hero p{color:#cfd6e2;font-size:1.12rem;max-width:34rem;margin:0}
+.cta{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.7rem}
+.demo{background:#ffffff0f;border:1px solid #ffffff26;border-radius:1rem;padding:1.4rem}
+.demo .l{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#9fb0c8}.demo .v{font:1.35rem Georgia,serif;margin:.2rem 0 .8rem}
+.arrow{color:var(--gold);margin:0 0 .6rem}
+.chips span{display:inline-block;background:#d9a44122;border:1px solid #d9a44166;color:#f3d79b;border-radius:2rem;padding:.1rem .7rem;margin:.15rem .2rem .15rem 0;font-size:.85rem}
+.tool .chips span{background:#d9a44122;color:#7a5a12;border-color:#d9a44188}
+section{padding:4rem 0}h2{font-size:clamp(1.7rem,3.4vw,2.4rem);margin-bottom:.7rem;max-width:42rem}.lead{color:var(--mut);max-width:42rem;margin:0 0 2rem}
+.alt{background:#fff;border-block:1px solid var(--line)}
+.grid{display:grid;gap:1.1rem;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))}
+.card{background:#fff;border:1px solid var(--line);border-radius:.9rem;padding:1.3rem}.alt .card{background:var(--paper)}.card h3{font-size:1.15rem;margin-bottom:.4rem}.card p{margin:0;color:var(--mut);font-size:.97rem}
+.flow{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:2rem}.node{flex:1;min-width:9rem;border:1px solid var(--line);border-radius:.8rem;padding:.9rem;text-align:center;background:#fff;font-weight:600}.node small{display:block;color:var(--mut);font-weight:400}.node.p{background:var(--ink);color:#fff;border-color:var(--ink)}.node.p small{color:var(--gold)}.sep{align-self:center;color:var(--gold);font-size:1.4rem}
+textarea{width:100%;font:inherit;padding:.7rem;border:1px solid #b9b2a3;border-radius:.6rem;margin:.3rem 0 .7rem;background:#fff;color:var(--tx)}
+.res{font:1.3rem Georgia,serif;min-height:2rem;margin:.9rem 0 .3rem}
+ul.tick{list-style:none;padding:0;margin:0 0 1.6rem;display:grid;gap:.6rem}ul.tick li{padding-left:1.7rem;position:relative}ul.tick li:before{content:"✓";position:absolute;left:0;color:#2e7d32;font-weight:700}
+ol.road{list-style:none;margin:0;padding:0 0 0 1.5rem;border-left:2px solid var(--gold)}ol.road li{margin:0 0 1.4rem;position:relative}ol.road li:before{content:"";position:absolute;left:-1.95rem;top:.45rem;width:.7rem;height:.7rem;border-radius:50%;background:var(--gold)}ol.road b{display:block}
+.note{background:#d9a44122;border-left:4px solid var(--gold);padding:.8rem 1rem;border-radius:.4rem;margin-top:1.5rem;color:#5b4310}
+footer{background:var(--ink);color:#b9c4d6;padding:2.5rem 0;font-size:.93rem}footer a{color:#fff}footer .wrap{display:flex;gap:1rem 2rem;flex-wrap:wrap;justify-content:space-between}
+@media(max-width:760px){.hero .wrap{grid-template-columns:1fr}nav a.h{display:none}.hero{padding:3rem 0}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main" data-k="skip">Lewati ke konten</a>
+<header><div class="wrap"><a class="logo" href="#top" aria-label="Wanda"><svg class="lo" viewBox="0 0 64 64" width="30" height="30" aria-hidden="true"><path d="M14 12H50A6 6 0 0 1 56 18V38A6 6 0 0 1 50 44H28L18 54V44H14A6 6 0 0 1 8 38V18A6 6 0 0 1 14 12Z" fill="#d9a441"/><path d="M17 22L23.5 36L32 25L40.5 36L47 22" fill="none" stroke="#0e1a2e" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Wanda</a>
+<nav aria-label="Menu"><a class="h" href="#cara" data-k="n1">Cara kerja</a><a class="h" href="#coba" data-k="n2">Coba</a><a class="h" href="#komunitas" data-k="n3">Komunitas</a><a class="h" href="#peta" data-k="n4">Peta jalan</a><a class="h" href="https://github.com/benisobahasa/wanda">GitHub</a><button class="lg" id="lg" aria-label="Language">EN</button></nav></div></header>
+<main id="main">
+<div class="hero" id="top"><div class="wrap"><div>
+<div class="kick" data-k="kick">Terbuka · Offline · Dikelola komunitas</div>
+<h1 data-k="h1">AI yang benar-benar mengerti bahasa Jawa.</h1>
+<p data-k="sub">Wanda adalah lapisan sumber terbuka di antara speech-to-text dan model bahasa. Ia memahami kata Jawa dan dialek, memberi tahu AI saat ragu, dan berjalan di perangkat Anda.</p>
+<div class="cta"><a class="btn gold" href="#coba" data-k="c1">Coba sekarang</a><a class="btn ghost" href="https://github.com/benisobahasa/wanda" data-k="c2">Lihat kode</a></div></div>
+<div class="demo" aria-label="Contoh"><div class="l" data-k="d1">Transkrip dari speech-to-text</div><div class="v">kulo mboten ngertos</div><div class="arrow">↓ Wanda</div>
+<div class="l" data-k="d2">Arti dalam bahasa Indonesia</div><div class="v">saya tidak tahu</div><div class="chips"><span>kulo → saya</span><span>mboten → tidak</span><span>ngertos → tahu</span></div></div></div></div>
+
+<section><div class="wrap"><h2 data-k="p0">Mesin suara lebih paham bahasa baku daripada bahasa ibu Anda</h2><p class="lead" data-k="p00">Bahasa Jawa dituturkan lebih dari 80 juta orang, dengan dialek dan tingkat tutur yang kaya. Teknologi suara belum mengikuti.</p>
+<div class="grid"><div class="card"><h3 data-k="p1">Salah dengar</h3><p data-k="p1b">Sistem yang dilatih pada bahasa Indonesia baku sering salah menangkap kata Jawa dan dialek.</p></div>
+<div class="card"><h3 data-k="p2">Salah paham</h3><p data-k="p2b">Model bahasa menjawab teks yang rusak, bukan apa yang sebenarnya dikatakan.</p></div>
+<div class="card"><h3 data-k="p3">Penutur tak dilibatkan</h3><p data-k="p3b">Penutur jarang punya kendali atas bagaimana suara dan kata mereka dikumpulkan dan dipakai.</p></div></div></div></section>
+
+<section class="alt" id="cara"><div class="wrap"><h2 data-k="w0">Satu lapisan, tanpa mengganti sistem Anda</h2><p class="lead" data-k="w00">Wanda bekerja pada teks hasil speech-to-text mana pun dan menyiapkannya untuk model bahasa mana pun.</p>
+<div class="flow"><div class="node"><span data-k="f1">Suara</span><small data-k="f1b">Penutur</small></div><span class="sep">→</span><div class="node"><span data-k="f2">Speech-to-text</span><small data-k="f2b">sistem mana pun</small></div><span class="sep">→</span><div class="node p"><span>Wanda</span><small data-k="f3b">makna + keyakinan</small></div><span class="sep">→</span><div class="node"><span data-k="f4">Model bahasa</span><small data-k="f4b">sistem mana pun</small></div></div>
+<div class="grid"><div class="card"><h3 data-k="g1">Hati-hati</h3><p data-k="g1b">Hanya mengubah kata saat yakin. Kata bahasa Indonesia dilindungi.</p></div>
+<div class="card"><h3 data-k="g2">Transparan</h3><p data-k="g2b">Setiap keputusan dilaporkan beserta tingkat keyakinannya.</p></div>
+<div class="card"><h3 data-k="g3">Jujur saat ragu</h3><p data-k="g3b">Kata ambigu ditandai, tidak ditebak.</p></div>
+<div class="card"><h3 data-k="g4">Offline dan terbuka</h3><p data-k="g4b">Tanpa server dan pelacakan. Kode berlisensi MPL-2.0.</p></div></div></div></section>
+
+<section id="coba"><div class="wrap"><h2 data-k="t0">Coba langsung</h2><p class="lead" data-k="t00">Ketik kalimat Jawa atau dialek. Diproses di perangkat Anda; tidak ada yang dikirim.</p>
+<div class="card tool"><label for="t" data-k="tl">Teks Jawa / dialek</label><textarea id="t" rows="3">kowe wis mangan durung? aku kencot</textarea><button class="btn dark" id="go" data-k="tb">Pahami</button>
+<div class="res" id="o" aria-live="polite"></div><div class="chips" id="n"></div><p><a href="try.html" data-k="tf">Buka versi lengkap dan sarankan kata →</a></p></div></div></section>
+
+<section class="alt" id="komunitas"><div class="wrap"><h2 data-k="k0">Dikelola oleh penuturnya</h2><p class="lead" data-k="k00">Bahasa adalah milik komunitasnya, bukan sekadar data. Wanda dirancang dengan aturan yang melindungi penutur.</p>
+<ul class="tick"><li data-k="k1">Persetujuan tertulis dalam bahasa yang dipahami penutur</li><li data-k="k2">Kontributor memilih sendiri lisensi data mereka</li><li data-k="k3">Data bisa ditarik kembali kapan saja, dihapus dalam 30 hari</li><li data-k="k4">Data tidak pernah dijual</li><li data-k="k5">Dewan pengelola penutur dari berbagai daerah (sedang dibentuk)</li></ul>
+<a class="btn dark" href="https://github.com/benisobahasa/wanda/blob/main/governance/DATA_GOVERNANCE.md" data-k="k6">Baca kebijakan data</a> <a class="btn dark" href="review.html" data-k="k8">Bantu review kata</a> <a class="btn dark" href="try.html#saran" data-k="k7">Tambah kata dialek Anda</a></div></section>
+
+<section id="peta"><div class="wrap"><h2 data-k="r0">Peta jalan yang jujur</h2>
+<ol class="road"><li><b data-k="r1">Sekarang · v0.3</b><span data-k="r1b">Kode, aplikasi web, halaman review untuk penutur, API lokal, frasa multi-kata, G2P dan morfologi awal, alat benchmark, dan kamus awal 107 entri yang belum direview.</span></li>
+<li><b data-k="r2">Berikutnya</b><span data-k="r2b">Review kamus oleh penutur dari beberapa daerah, termasuk dialek Pantura Rembang.</span></li>
+<li><b data-k="r3">Lalu</b><span data-k="r3b">Rekaman berizin dan evaluasi terbuka, termasuk hasil yang gagal.</span></li>
+<li><b data-k="r4">Tujuan · v1.0</b><span data-k="r4b">Data terreview dan dikelola komunitas, dokumentasi dua bahasa.</span></li></ol>
+<div class="note" data-k="nt">Wanda masih prototipe awal dan bisa salah. Kami lebih memilih tidak mengubah kata daripada mengubahnya dengan salah.</div></div></section>
+</main>
+<footer><div class="wrap"><div><span data-k="ft">Dibuat oleh Indah Rohmayani, penutur asli bahasa Jawa (dialek Pantura Rembang).</span><br>Wanda · Phono-Semantic Intelligence Layer · v0.3</div>
+<div><a href="https://github.com/benisobahasa/wanda">GitHub</a> · <a href="https://github.com/benisobahasa/wanda/blob/main/LICENSE">MPL-2.0</a> · <a href="try.html">App</a> · <a href="review.html">Review</a></div></div></footer>
+<script src="data.js"></script><script src="wanda.js"></script>
+<script>
+var $=function(i){return document.getElementById(i)};
+var EN={skip:'Skip to content',n1:'How it works',n2:'Try it',n3:'Community',n4:'Roadmap',kick:'Open · Offline · Community-governed',h1:'AI that actually understands Javanese.',sub:'Wanda is open-source middleware between speech-to-text and language models. It understands Javanese and dialect words, tells the AI when it is unsure, and runs on your own device.',c1:'Try it now',c2:'View the code',d1:'Transcript from speech-to-text',d2:'Meaning in Indonesian',p0:'Speech systems understand standard Indonesian better than your mother tongue',p00:'Javanese has more than 80 million speakers and rich dialects and speech levels. Voice technology has not kept up.',p1:'Misheard',p1b:'Systems trained on standard Indonesian often mishear Javanese and dialect words.',p2:'Misunderstood',p2b:'The language model answers the garbled text, not what was actually said.',p3:'Speakers left out',p3b:'Speakers rarely control how their voices and words are collected and used.',w0:'One layer, no need to replace your stack',w00:'Wanda works on the text from any speech-to-text system and prepares it for any language model.',f1:'Voice',f1b:'Speaker',f2:'Speech-to-text',f2b:'any system',f3b:'meaning + confidence',f4:'Language model',f4b:'any system',g1:'Careful',g1b:'Rewrites only when confident. Indonesian words are protected.',g2:'Transparent',g2b:'Every decision is reported with its confidence.',g3:'Honest about doubt',g3b:'Ambiguous words are flagged, never guessed.',g4:'Offline and open',g4b:'No server, no tracking. MPL-2.0 licensed code.',t0:'Try it live',t00:'Type a Javanese or dialect sentence. It is processed on your device; nothing is sent.',tl:'Javanese / dialect text',tb:'Understand',tf:'Open the full app and suggest words →',k0:'Governed by its speakers',k00:'A language belongs to its community, not just a dataset. Wanda is built with rules that protect speakers.',k1:'Written consent in a language speakers understand',k2:'Contributors choose the licence of their own data',k3:'Data can be withdrawn at any time, deleted within 30 days',k4:'Data is never sold',k5:'A stewardship council of speakers from different regions (being formed)',k6:'Read the data policy',k7:'Add your dialect words',k8:'Help review words',r0:'An honest roadmap',r1:'Now · v0.3',r1b:'Code, web app, a review page for speakers, local API, multi-word expressions, first G2P and morphology rules, benchmark tools, and a seed lexicon of 107 unreviewed entries.',r2:'Next',r2b:'Speaker review of the lexicon across regions, including the Pantura Rembang dialect.',r3:'Then',r3b:'Consented recordings and open evaluation, failures included.',r4:'Goal · v1.0',r4b:'Reviewed, community-governed data and documentation in two languages.',nt:'Wanda is an early prototype and can be wrong. We would rather leave a word alone than rewrite it wrongly.',ft:'Created by Indah Rohmayani, a native Javanese speaker (Pantura Rembang dialect).'};
+function setLang(l){document.documentElement.lang=l;document.querySelectorAll('[data-k]').forEach(function(e){if(e.dataset.id===undefined)e.dataset.id=e.innerHTML;e.innerHTML=l==='en'&&EN[e.dataset.k]?EN[e.dataset.k]:e.dataset.id});$('lg').textContent=l==='en'?'ID':'EN';try{localStorage.lang=l}catch(x){}}
+var cur=(function(){try{if(localStorage.lang)return localStorage.lang}catch(x){}return /^id/.test(navigator.language||'id')?'id':'en'})();
+$('lg').onclick=function(){cur=cur==='en'?'id':'en';setLang(cur)};if(cur==='en')setLang('en');
+function run(){var P=WANDA.create(),t=$('t').value;$('o').textContent=P.normalize(t);$('n').textContent='';P.analyze(t).filter(function(r){return r.applied}).forEach(function(r){var s=document.createElement('span');s.textContent=r.original+' → '+r.output;$('n').appendChild(s)})}
+$('go').onclick=run;run();
+</script>
+</body>
+</html>
